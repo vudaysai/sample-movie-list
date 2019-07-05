@@ -4,13 +4,10 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 export default class MoviesList extends React.Component {
-  taskTypes = [];
-  MovieDetails = jsonMoviesData;
   constructor(props) {
     super(props);
     this.state = {
-      value: '', taskTypes: jsonMoviesData, modal: false,
-      act: 0,
+      value: '', taskTypes: jsonMoviesData, modal: false, movieDetails: jsonMoviesData,
       index: '',
       datas: [],
       showComponent: false,
@@ -35,49 +32,50 @@ export default class MoviesList extends React.Component {
       taskTypes: suggestions
     })
   }
+
   submitMovieInfo = (e) => {
     e.preventDefault();
-    let MovieDetails = this.state.MovieDetails;
+    let movieDetails = this.state.movieDetails;
     let img = this.refs.url.value;
     let title = this.refs.name.value;
     let rating = this.refs.ratings.value;
     let likes = this.refs.likes.value;
     let year = this.refs.year.value;
     let content = this.refs.content.value;
-    if (this.state.act === 0) {
-      let id = this.MovieDetails.length + 1;
-      let data = {
-        id, img, title, rating, likes, year, content
-      }
-      this.MovieDetails.push(data);
+    let id = movieDetails.length + 1;
+    let data = {
+      id, img, title, rating, likes, year, content
     }
+    this.state.movieDetails.push(data);
     this.refs.myform.reset();
     this.setState({
-      MovieDetails: MovieDetails,
-      taskTypes: this.MovieDetails, modal: !this.state.modal
+      movieDetails: movieDetails,
+      taskTypes: this.state.movieDetails, modal: !this.state.modal
     });
   }
-  showMovieInfo(postdetails) {
+
+  showMovieInfo(movieDetails) {
     this.setState({
       showComponent: true,
-      movieDisplayInfo: postdetails
+      movieDisplayInfo: movieDetails
     });
   }
   fRemove = (index) => {
-    let MovieDetails = this.state.MovieDetails;
-    MovieDetails.splice(index, 1);
+    let movieDetails = this.state.movieDetails;
+    movieDetails.splice(index, 1);
     this.refs.myform.reset();
     this.setState({
-      MovieDetails: MovieDetails,
-      taskTypes: this.MovieDetails
+      movieDetails: movieDetails,
+      taskTypes: this.movieDetails
     });
   }
-  removeMovieInfo(postdetails) {
+  removeMovieInfo(movieDetails) {
     this.setState({
       showComponent: true,
-      movieDisplayInfo: postdetails
+      movieDisplayInfo: movieDetails
     });
   }
+
   searchInfo() {
     return (
       <div>
@@ -102,6 +100,7 @@ export default class MoviesList extends React.Component {
       </div>
     )
   }
+
   newMoviesInfo() {
     return (
       <div>
@@ -146,6 +145,7 @@ export default class MoviesList extends React.Component {
       </div>
     )
   }
+
   movieInfo() {
     return (
       this.state.taskTypes.map((movieData, index) => {
@@ -210,7 +210,6 @@ export default class MoviesList extends React.Component {
       )
     )
   }
-
 
   render() {
     return (
