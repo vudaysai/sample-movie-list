@@ -3,7 +3,9 @@ import jsonMoviesData from './data/data.json';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
+
 export default class MoviesList extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -11,17 +13,21 @@ export default class MoviesList extends React.Component {
       index: '',
       datas: [],
       showComponent: false,
-      movieDisplayInfo: ''
+      movieDisplayInfo: '',
+      newMovie: { id: jsonMoviesData + 1, url: '', name: '', ratings: '', likes: '', content: '', year: '' }
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.showMovieInfo = this.showMovieInfo.bind(this);
+    this.dataChange = this.dataChange.bind(this);
   }
+
   toggle() {
     this.setState({
       modal: !this.state.modal
     });
   }
+
   handleChange(event) {
     this.setState({ value: event.target.value });
     this.taskTypes = jsonMoviesData.map(function (a) { return a });
@@ -33,24 +39,22 @@ export default class MoviesList extends React.Component {
     })
   }
 
+  dataChange(e) {
+    const { newMovie } = this.state
+    newMovie[e.target.id] = e.target.value
+    this.setState({
+      newMovie: newMovie
+    });
+  }
+
   submitMovieInfo = (e) => {
     e.preventDefault();
-    let movieDetails = this.state.movieDetails;
-    let img = this.refs.url.value;
-    let title = this.refs.name.value;
-    let rating = this.refs.ratings.value;
-    let likes = this.refs.likes.value;
-    let year = this.refs.year.value;
-    let content = this.refs.content.value;
-    let id = movieDetails.length + 1;
-    let data = {
-      id, img, title, rating, likes, year, content
-    }
-    this.state.movieDetails.push(data);
-    this.refs.myform.reset();
+    const { movieDetails, newMovie, modal } = this.state
+    movieDetails.push(newMovie);
     this.setState({
       movieDetails: movieDetails,
-      taskTypes: this.state.movieDetails, modal: !this.state.modal
+      taskTypes: movieDetails, modal: !modal,
+      newMovie: { id: jsonMoviesData + 1, url: '', name: '', ratings: '', likes: '', content: '', year: '' }
     });
   }
 
@@ -60,6 +64,7 @@ export default class MoviesList extends React.Component {
       movieDisplayInfo: movieDetails
     });
   }
+
   fRemove = (index) => {
     let movieDetails = this.state.movieDetails;
     movieDetails.splice(index, 1);
@@ -69,6 +74,7 @@ export default class MoviesList extends React.Component {
       taskTypes: this.movieDetails
     });
   }
+
   removeMovieInfo(movieDetails) {
     this.setState({
       showComponent: true,
@@ -87,8 +93,7 @@ export default class MoviesList extends React.Component {
                 <span className="input-group-addon  bg-warning text-light p-2">
                   <i className="fa fa-search fa-2x"></i>
                 </span>
-                <input type="text" className="form-control bg-light text-dark" placeholder="Search Here" value={this.state.value}
-                  onChange={this.handleChange} />
+                <input type="text" className="form-control bg-light text-dark" placeholder="Search Here" value={this.state.value} onChange={this.handleChange} />
                 <div className="col-sm-1"></div>
                 <div className="col-sm-2 mt-1">
                   <Button color="primary" onClick={this.toggle}>Add Movie</Button>
@@ -102,6 +107,7 @@ export default class MoviesList extends React.Component {
   }
 
   newMoviesInfo() {
+    const { newMovie } = this.state
     return (
       <div>
         <div className="col-sm-1"></div>
@@ -112,27 +118,27 @@ export default class MoviesList extends React.Component {
               <ModalBody>
                 <div className="form-group">
                   <label>Image url*:</label>
-                  <input type="text" id="name" placeholder="Enter movie image url..." ref="url" className="form-control" />
+                  <input type="text" id="url" placeholder="Enter movie image url..." ref="url" className="form-control" onChange={this.dataChange} value={newMovie.url} />
                 </div>
                 <div className="form-group">
                   <label>Movie Name:*</label>
-                  <input type="text" id="type" placeholder="Enter Movie name..." ref="name" className="form-control" />
+                  <input type="text" id="name" placeholder="Enter Movie name..." ref="name" className="form-control" onChange={this.dataChange} value={newMovie.name} />
                 </div>
                 <div className="form-group">
                   <label>Ratings:*</label>
-                  <input type="text" id="use" placeholder="Enter Movie ratings..." ref="ratings" className="form-control" />
+                  <input type="text" id="ratings" placeholder="Enter Movie ratings..." ref="ratings" className="form-control" onChange={this.dataChange} value={newMovie.ratings} />
                 </div>
                 <div className="form-group">
                   <label>Likes*:</label>
-                  <input type="text" id="company" placeholder="Enter Movie Likes..." ref="likes" className="form-control" />
+                  <input type="text" id="likes" placeholder="Enter Movie Likes..." ref="likes" className="form-control" onChange={this.dataChange} value={newMovie.likes} />
                 </div>
                 <div className="form-group">
                   <label>Year:*</label>
-                  <input type="text" id="quantity" placeholder="Enter Year of Movie..." ref="year" className="form-control" />
+                  <input type="text" id="year" placeholder="Enter Year of Movie..." ref="year" className="form-control" onChange={this.dataChange} value={newMovie.year} />
                 </div>
                 <div className="form-group">
                   <label>Movie Content:*</label>
-                  <textarea type="text" id="price" rows="3" cols="3" placeholder="Enter Movie content..." ref="content" className="form-control"></textarea>
+                  <textarea type="text" id="content" rows="3" cols="3" placeholder="Enter Movie content..." ref="content" className="form-control" onChange={this.dataChange} value={newMovie.content}></textarea>
                 </div>
               </ModalBody>
               <ModalFooter>
