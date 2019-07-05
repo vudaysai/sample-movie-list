@@ -38,17 +38,14 @@ export default class Postdatas extends React.Component {
   fSubmit = (e) => {
     console.log(this.addData.length);
     e.preventDefault();
-    // console.log('try');
     let addData = this.state.addData;
     let img = this.refs.url.value;
     let title = this.refs.name.value;
-
     let rating = this.refs.ratings.value;
     let likes = this.refs.likes.value;
     let year = this.refs.year.value;
     let content = this.refs.content.value;
     if (this.state.act === 0) {
-      //new
       let id = this.addData.length + 1;
       let data = {
         id, img, title, rating, likes, year, content
@@ -85,7 +82,6 @@ export default class Postdatas extends React.Component {
       showComponent: true,
       passPostDetail: postdetails
     });
-
   }
 
   render() {
@@ -112,7 +108,6 @@ export default class Postdatas extends React.Component {
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                   <ModalHeader toggle={this.toggle} className="text-center">Add Movie</ModalHeader>
                   <ModalBody>
-
                     <div className="form-group">
                       <label>Image url*:</label>
                       <input type="text" id="name" placeholder="Enter movie image url..." ref="url" className="form-control" />
@@ -134,7 +129,6 @@ export default class Postdatas extends React.Component {
                       <input type="text" id="quantity" placeholder="Enter Year of Movie..." ref="year" className="form-control" />
                     </div>
                     <div className="form-group">
-
                       <label>Movie Content:*</label>
                       <textarea type="text" id="price" rows="3" cols="3" placeholder="Enter Movie content..." ref="content" className="form-control"></textarea>
                     </div>
@@ -164,7 +158,6 @@ export default class Postdatas extends React.Component {
                       <div className="container">
                         <div className="row">
                           <div className="col-sm-3 mr-5 mt-5 ml-5">
-
                             <img src={this.state.passPostDetail.img} width="300" height="300" />
                           </div>
                           <div className="col   ml-5">
@@ -176,7 +169,6 @@ export default class Postdatas extends React.Component {
                                 <div>
                                   <i className="fa fa-star fa-2x">{this.state.passPostDetail.rating}</i>
                                 </div>
-
                               </div>
                               <div className="col-sm-4">
                                 <div>
@@ -206,7 +198,8 @@ export default class Postdatas extends React.Component {
                       null
                   }
                 </div>
-              </div></div>
+              </div>
+            </div>
           </div>
         )
       }
