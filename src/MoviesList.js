@@ -36,7 +36,6 @@ export default class MoviesList extends React.Component {
     })
   }
   submitMovieInfo = (e) => {
-    console.log(this.MovieDetails.length);
     e.preventDefault();
     let MovieDetails = this.state.MovieDetails;
     let img = this.refs.url.value;
@@ -52,7 +51,6 @@ export default class MoviesList extends React.Component {
       }
       this.MovieDetails.push(data);
     }
-    console.log(this.MovieDetails);
     this.refs.myform.reset();
     this.setState({
       MovieDetails: MovieDetails,
@@ -60,7 +58,6 @@ export default class MoviesList extends React.Component {
     });
   }
   showMovieInfo(postdetails) {
-    console.log(postdetails);
     this.setState({
       showComponent: true,
       movieDisplayInfo: postdetails
@@ -69,7 +66,6 @@ export default class MoviesList extends React.Component {
   fRemove = (index) => {
     let MovieDetails = this.state.MovieDetails;
     MovieDetails.splice(index, 1);
-    console.log(this.MovieDetails);
     this.refs.myform.reset();
     this.setState({
       MovieDetails: MovieDetails,
@@ -77,7 +73,6 @@ export default class MoviesList extends React.Component {
     });
   }
   removeMovieInfo(postdetails) {
-    console.log(postdetails);
     this.setState({
       showComponent: true,
       movieDisplayInfo: postdetails
