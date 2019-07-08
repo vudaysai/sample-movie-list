@@ -4,17 +4,23 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-export default class MoviesList extends React.Component {
+const data = [
+  { id: 'img', placeholder: 'Enter movie image url...', label: 'Image url*' }, { id: 'title', placeholder: 'Enter Movie name...', label: 'Move Name*' },
+  { id: 'likes', placeholder: 'Enter Movie Likes...', label: 'Likes' }, { id: 'year', placeholder: 'Enter Year of Movie...', label: 'Year Of Movie' },
+  { id: 'rating', placeholder: 'Enter Movie ratings...', label: 'Movie Ratings' }]
 
+export default class MoviesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value: '', taskTypes: jsonMoviesData, modal: false, movieDetails: jsonMoviesData,
+      act: 0,
       index: '',
       datas: [],
       showComponent: false,
       movieDisplayInfo: '',
-      newMovie: { id: jsonMoviesData + 1, url: '', name: '', ratings: '', likes: '', content: '', year: '' }
+      newMovie: { id: jsonMoviesData.length + 1, img: '', title: '', rating: '', likes: '', content: '', year: '' },
+
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -50,13 +56,20 @@ export default class MoviesList extends React.Component {
   submitMovieInfo = (e) => {
     e.preventDefault();
     const { movieDetails, newMovie, modal } = this.state
-    movieDetails.push(newMovie);
+    if (this.state.act === 0) {
+      movieDetails.push(newMovie);
+    }
+
+
     this.setState({
       movieDetails: movieDetails,
       taskTypes: movieDetails, modal: !modal,
-      newMovie: { id: jsonMoviesData + 1, url: '', name: '', ratings: '', likes: '', content: '', year: '' }
+      newMovie: { id: jsonMoviesData + 1, img: '', title: '', rating: '', likes: '', content: '', year: '' }
+
     });
+
   }
+
 
   showMovieInfo(movieDetails) {
     this.setState({
@@ -65,12 +78,27 @@ export default class MoviesList extends React.Component {
     });
   }
 
-  removeMovieInfo = (index) => {
+
+  removeMovieInfo = (i) => {
     let movieDetails = this.state.movieDetails;
-    movieDetails.splice(index, 1);
+    if (i !== -1) {
+      movieDetails.splice(i, 1);
+      this.setState({
+        showComponent: true,
+        movieDetails: movieDetails
+      });
+    }
+
+  }
+
+  editMovieInfo = (i) => {
+    let movie = this.state.movieDetails[i];
+    this.setState({ act: 1, newMovie: movie });
+  }
+
+  closeMovieInfo = (i) => {
     this.setState({
-      showComponent: true,
-      movieDisplayInfo: movieDetails
+      showComponent: false,
     });
   }
 
@@ -100,37 +128,28 @@ export default class MoviesList extends React.Component {
 
   newMoviesInfo() {
     const { newMovie } = this.state
+
     return (
       <div>
         <div className="col-sm-1"></div>
         <div className="col-sm-2 mt-5">
+
           <form ref="myform" className="myForm" >
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
               <ModalHeader toggle={this.toggle} className="text-center">Add Movie</ModalHeader>
               <ModalBody>
-                <div className="form-group">
-                  <label>Image url*:</label>
-                  <input type="text" id="url" placeholder="Enter movie image url..." ref="url" className="form-control" onChange={this.dataChange} value={newMovie.url} />
-                </div>
-                <div className="form-group">
-                  <label>Movie Name:*</label>
-                  <input type="text" id="name" placeholder="Enter Movie name..." ref="name" className="form-control" onChange={this.dataChange} value={newMovie.name} />
-                </div>
-                <div className="form-group">
-                  <label>Ratings:*</label>
-                  <input type="text" id="ratings" placeholder="Enter Movie ratings..." ref="ratings" className="form-control" onChange={this.dataChange} value={newMovie.ratings} />
-                </div>
-                <div className="form-group">
-                  <label>Likes*:</label>
-                  <input type="text" id="likes" placeholder="Enter Movie Likes..." ref="likes" className="form-control" onChange={this.dataChange} value={newMovie.likes} />
-                </div>
-                <div className="form-group">
-                  <label>Year:*</label>
-                  <input type="text" id="year" placeholder="Enter Year of Movie..." ref="year" className="form-control" onChange={this.dataChange} value={newMovie.year} />
-                </div>
+                {data.map(({ id, label, placeholder }, i) => {
+                  return (
+                    <div className="form-group">
+                      <label> {label}</label>
+                      <input type="text" id={id} placeholder={placeholder} className="form-control" onChange={this.dataChange} value={newMovie[id]} />
+                    </div>
+                  )
+                })
+                }
                 <div className="form-group">
                   <label>Movie Content:*</label>
-                  <textarea type="text" id="content" rows="3" cols="3" placeholder="Enter Movie content..." ref="content" className="form-control" onChange={this.dataChange} value={newMovie.content}></textarea>
+                  <textarea type="text" id="content" rows="3" cols="3" placeholder="Enter Movie content..." className="form-control" onChange={this.dataChange} value={newMovie.content}></textarea>
                 </div>
               </ModalBody>
               <ModalFooter>
@@ -139,6 +158,7 @@ export default class MoviesList extends React.Component {
               </ModalFooter>
             </Modal>
           </form>
+
         </div>
       </div>
     )
@@ -146,9 +166,9 @@ export default class MoviesList extends React.Component {
 
   movieInfo() {
     return (
-      this.state.taskTypes.map((movieData, index) => {
+      this.state.taskTypes.map((movieData, i) => {
         return (
-          <div className="row" key={index}>
+          <div className="row" key={i}>
             <div className="col-sm-10 offset-sm-1 mt-5">
               <div className="card-deck">
                 <div className="col-sm-4 offset-sm-4">
@@ -189,8 +209,14 @@ export default class MoviesList extends React.Component {
                               </div>
                             </div>
                             <div className="row mt-3">
-                              <div className="col-sm-2 offset-sm-4">
-                                <button className="btn btn-primary myButton mb-3" onClick={() => this.removeMovieInfo(index)}  >Close</button>
+                              <div className="col-sm-2 offset-sm-2">
+                                <button className="btn btn-primary myButton mb-3" onClick={() => this.removeMovieInfo(i)}  >Delete</button>
+                              </div>
+                              <div className="col-sm-2 offset-sm-2">
+                                <button className="btn btn-primary myButton mb-3" onClick={() => { this.toggle(); this.editMovieInfo(i) }}  >Edit</button>
+                              </div>
+                              <div className="col-sm-2 offset-sm-2">
+                                <button className="btn btn-primary myButton mb-3" onClick={() => this.closeMovieInfo(i)}>Close</button>
                               </div>
                             </div>
                           </div>
