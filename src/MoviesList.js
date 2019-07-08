@@ -65,17 +65,9 @@ export default class MoviesList extends React.Component {
     });
   }
 
-  fRemove = (index) => {
+  removeMovieInfo = (index) => {
     let movieDetails = this.state.movieDetails;
     movieDetails.splice(index, 1);
-    this.refs.myform.reset();
-    this.setState({
-      movieDetails: movieDetails,
-      taskTypes: this.movieDetails
-    });
-  }
-
-  removeMovieInfo(movieDetails) {
     this.setState({
       showComponent: true,
       movieDisplayInfo: movieDetails
