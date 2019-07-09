@@ -1,5 +1,4 @@
-import React from 'react'
-import jsonMoviesData from './data/data.json';
+import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -13,19 +12,28 @@ export default class MoviesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '', taskTypes: jsonMoviesData, modal: false, movieDetails: jsonMoviesData,
+      value: '', taskTypes: [], modal: false, movieDetails: [],
       act: 0,
       index: '',
-      datas: [],
       showComponent: false,
       movieDisplayInfo: '',
-      newMovie: { id: jsonMoviesData.length + 1, img: '', title: '', rating: '', likes: '', content: '', year: '' },
-
+      newMovie: { id: 9, img: '', title: '', rating: '', likes: '', content: '', year: '' },
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.showMovieInfo = this.showMovieInfo.bind(this);
     this.dataChange = this.dataChange.bind(this);
+  }
+  componentDidMount() {
+
+    fetch('http://172.16.0.140:3005/api/v3/users/faq')
+      .then(response => response.json())
+      .then(jsonMoviesData => {
+        this.setState({
+          jsonMoviesData: jsonMoviesData, taskTypes: jsonMoviesData, movieDetails: jsonMoviesData
+        })
+      })
+      .catch(error => console.log(error))
   }
 
   toggle() {
@@ -36,8 +44,8 @@ export default class MoviesList extends React.Component {
 
   handleChange(event) {
     this.setState({ value: event.target.value });
-    this.taskTypes = jsonMoviesData.map(function (a) { return a });
-    let suggestions = this.taskTypes.filter(function (tname) {
+    let taskTypes = this.state.jsonMoviesData.map(function (a) { return a });
+    let suggestions = taskTypes.filter(function (tname) {
       return tname.title.toLowerCase().includes(event.target.value.toLowerCase());
     });
     this.setState({
@@ -59,17 +67,12 @@ export default class MoviesList extends React.Component {
     if (this.state.act === 0) {
       movieDetails.push(newMovie);
     }
-
-
     this.setState({
       movieDetails: movieDetails,
       taskTypes: movieDetails, modal: !modal,
-      newMovie: { id: jsonMoviesData + 1, img: '', title: '', rating: '', likes: '', content: '', year: '' }
-
+      newMovie: { id: 10, img: '', title: '', rating: '', likes: '', content: '', year: '' }
     });
-
   }
-
 
   showMovieInfo(movieDetails) {
     this.setState({
@@ -77,7 +80,6 @@ export default class MoviesList extends React.Component {
       movieDisplayInfo: movieDetails
     });
   }
-
 
   removeMovieInfo = (i) => {
     let movieDetails = this.state.movieDetails;
@@ -88,7 +90,6 @@ export default class MoviesList extends React.Component {
         movieDetails: movieDetails
       });
     }
-
   }
 
   editMovieInfo = (i) => {
@@ -128,24 +129,23 @@ export default class MoviesList extends React.Component {
 
   newMoviesInfo() {
     const { newMovie } = this.state
-
     return (
       <div>
         <div className="col-sm-1"></div>
         <div className="col-sm-2 mt-5">
-
           <form ref="myform" className="myForm" >
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
               <ModalHeader toggle={this.toggle} className="text-center">Add Movie</ModalHeader>
               <ModalBody>
-                {data.map(({ id, label, placeholder }, i) => {
-                  return (
-                    <div className="form-group">
-                      <label> {label}</label>
-                      <input type="text" id={id} placeholder={placeholder} className="form-control" onChange={this.dataChange} value={newMovie[id]} />
-                    </div>
-                  )
-                })
+                {
+                  data.map(({ id, label, placeholder }, i) => {
+                    return (
+                      <div className="form-group" key={i}>
+                        <label> {label}</label>
+                        <input type="text" id={id} placeholder={placeholder} className="form-control" onChange={this.dataChange} value={newMovie[id]} />
+                      </div>
+                    )
+                  })
                 }
                 <div className="form-group">
                   <label>Movie Content:*</label>
@@ -158,7 +158,6 @@ export default class MoviesList extends React.Component {
               </ModalFooter>
             </Modal>
           </form>
-
         </div>
       </div>
     )
@@ -246,3 +245,6 @@ export default class MoviesList extends React.Component {
     )
   }
 }
+
+
+
