@@ -3,12 +3,16 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { fetchJsonData } from './data/http.js';
+import MovieDetails from './MovieDetails';
+import { Router, Link, navigate } from "@reach/router"
+
 const data = [
   { id: 'img', placeholder: 'Enter movie image url...', label: 'Image url*' }, { id: 'title', placeholder: 'Enter Movie name...', label: 'Move Name*' },
   { id: 'likes', placeholder: 'Enter Movie Likes...', label: 'Likes' }, { id: 'year', placeholder: 'Enter Year of Movie...', label: 'Year Of Movie' },
   { id: 'rating', placeholder: 'Enter Movie ratings...', label: 'Movie Ratings' }]
 
 export default class MoviesList extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -177,9 +181,14 @@ export default class MoviesList extends React.Component {
             <div className="col-sm-10 offset-sm-1 mt-5">
               <div className="card-deck">
                 <div className="col-sm-4 offset-sm-4">
-                  <img src={movieData.img} width="300" className="ml-5 " alt="movieimage" onClick={() => this.showMovieInfo(movieData)} />
+                  <img
+                    src={movieData.img}
+                    width="300"
+                    className="ml-5 "
+                    alt="movieimage"
+                    onClick={() => { navigate('MovieDetails', { state: movieData }) }} />
                 </div>
-                <div>
+                {/* <div>
                   {
                     this.state.showComponent && this.state.movieDisplayInfo.id === movieData.id ?
                       <div className="container">
@@ -230,7 +239,7 @@ export default class MoviesList extends React.Component {
                       :
                       null
                   }
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -246,9 +255,12 @@ export default class MoviesList extends React.Component {
         {this.searchInfo()}
         {this.newMoviesInfo()}
         {this.movieInfo()}
+
       </div>
 
     )
+
+
   }
 }
 
