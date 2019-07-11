@@ -2,9 +2,10 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import { fetchJsonData } from './data/http.js';
 import MovieDetails from './MovieDetails';
-import { Router, Link, navigate } from "@reach/router"
+import { fetchJsonData } from './data/http.js';
+
+import { navigate, __esModule } from "@reach/router"
 
 const data = [
   { id: 'img', placeholder: 'Enter movie image url...', label: 'Image url*' }, { id: 'title', placeholder: 'Enter Movie name...', label: 'Move Name*' },
@@ -22,12 +23,14 @@ export default class MoviesList extends React.Component {
       showComponent: false,
       movieDisplayInfo: '',
       newMovie: { id: 9, img: '', title: '', rating: '', likes: '', content: '', year: '' },
+
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.showMovieInfo = this.showMovieInfo.bind(this);
     this.dataChange = this.dataChange.bind(this);
   }
+
   componentDidMount() {
     var responseData = fetchJsonData().then(data => {
       console.log(data)
@@ -36,15 +39,8 @@ export default class MoviesList extends React.Component {
       })
     })
     console.log(responseData)
-    // fetch('http://172.16.0.140:3005/api/v3/users/faq')
-    //   .then(response => response.json())
-    //   .then(jsonMoviesData => {
-    //     this.setState({
-    //       jsonMoviesData: jsonMoviesData, taskTypes: jsonMoviesData, movieDetails: jsonMoviesData
-    //     })
-    //   })
-    //   .catch(error => console.log(error))
   }
+
   toggle() {
     this.setState({
       modal: !this.state.modal
@@ -186,7 +182,7 @@ export default class MoviesList extends React.Component {
                     width="300"
                     className="ml-5 "
                     alt="movieimage"
-                    onClick={() => { navigate('MovieDetails', { state: movieData }) }} />
+                    onClick={() => { navigate('MovieDetails', { state: { movieData, i } }) }} />
                 </div>
                 {/* <div>
                   {
@@ -214,7 +210,28 @@ export default class MoviesList extends React.Component {
                               <div className="col-sm-4">
                                 <div>
                                   <h3>{this.state.movieDisplayInfo.year} </h3>
-                                </div>
+                                </div> removeMovieInfo = (i) => {
+    let movieDetails = this.state.movieDetails;
+    if (i !== -1) {
+      movieDetails.splice(i, 1);
+      this.setState({
+        showComponent: true,
+        movieDetails: movieDetails
+      });
+    }
+  }
+
+  editMovieInfo = (i) => {
+    let movie = this.state.movieDetails[i];
+    this.setState({ act: 1, newMovie: movie });
+  }
+
+  closeMovieInfo = (i) => {
+    this.setState({
+      showComponent: false,
+    });
+  }
+
                               </div>
                             </div>
                             <div className="row mt-3">
@@ -255,7 +272,7 @@ export default class MoviesList extends React.Component {
         {this.searchInfo()}
         {this.newMoviesInfo()}
         {this.movieInfo()}
-
+        {/* <MovieDetails removeFunc={this.removeMovieInfo} /> */}
       </div>
 
     )

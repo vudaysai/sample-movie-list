@@ -1,20 +1,17 @@
 import React from 'react';
-import { taskTypes, movieDisplayInfo } from './MoviesList'
-
 export default class MovieDetails extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            movieDisplayInfo: props.location.state
+            movieDisplayInfo: props.location.state,
+            i: props.location.state,
+
         }
-
     }
-
 
     movieInformation() {
         return (
-
-
             <div className="container">
                 <div className="row">
                     <div className="col-sm-3 mr-5 mt-5 ml-5">
@@ -46,17 +43,17 @@ export default class MovieDetails extends React.Component {
                                 <h6>{this.state.movieDisplayInfo.content}</h6>
                             </div>
                         </div>
-                        {/* <div className="row mt-3">
+                        <div className="row mt-3">
                             <div className="col-sm-2 offset-sm-2">
-                                <button className="btn btn-primary myButton mb-3" onClick={() => this.removeMovieInfo(i)}  >Delete</button>
+                                <button className="btn btn-primary myButton mb-3" onClick={() => { this.removeMovieInfo(this.state.i) }} >Delete</button>
                             </div>
                             <div className="col-sm-2 offset-sm-2">
-                                <button className="btn btn-primary myButton mb-3" onClick={() => { this.toggle(); this.editMovieInfo(i) }}  >Edit</button>
+                                <button className="btn btn-primary myButton mb-3" onClick={() => { this.toggle(); this.editMovieInfo(this.state.i) }}  >Edit</button>
                             </div>
                             <div className="col-sm-2 offset-sm-2">
-                                <button className="btn btn-primary myButton mb-3" onClick={() => this.closeMovieInfo(i)}>Close</button>
+                                <button className="btn btn-primary myButton mb-3" onClick={() => this.closeMovieInfo(this.state.i)}>Close</button>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </div>
