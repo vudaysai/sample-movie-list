@@ -11,7 +11,6 @@ export default class MovieDetails extends React.Component {
     static getDerivedStateFromProps(props) {
 
         if (props.movieData.length) {
-            debugger
             const movieIndex = props.movieData.findIndex(movie => movie.id === props.location.state.id)
             if (movieIndex >= 0) {
                 return {

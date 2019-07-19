@@ -86,10 +86,6 @@ export default class Data extends React.Component {
 	editMovieInfo = (id) => {
 		let movieIndex = this.state.movieDetails.findIndex(movie => movie.id === id);
 		this.setState({ act: 1, newMovie: this.state.movieDetails[movieIndex], modal: !this.state.modal });
-		// let movieIndex1 = this.state.jsonMoviesData.findIndex(movie => movie.id === id);
-		// if (this.state.movieDetails[movieIndex] !== this.state.jsonMoviesData[movieIndex1]) {
-		// 	this.setState({act: 1, newMovie: this.state.movieDetails[movieIndex],modal: !this.state.modal })
-		// }
 	}
 
 	closeMovieInfo = () => {
