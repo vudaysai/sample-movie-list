@@ -15,7 +15,7 @@ export default class Data extends React.Component {
 		super(props)
 		this.state = {
 			jsonMoviesData: [], movieDetails: '', modal: false, act: 0, showComponent: false, taskTypes: [], suggestions: [],
-			newMovie: { id: 1, img: '', title: '', rating: '', likes: '', content: '', year: '' }
+			newMovie: { id: 1, img: '', title: '', rating: '', likes: '', content: '', year: '', movie: [] }
 		}
 		this.removeMovieInfo = this.removeMovieInfo.bind(this);
 		this.editMovieInfo = this.editMovieInfo.bind(this);
@@ -43,9 +43,16 @@ export default class Data extends React.Component {
 	submitMovieInfo = (e) => {
 		e.preventDefault();
 		const { movieDetails, newMovie, modal } = this.state
+
+
 		if (this.state.act === 0) {
 			movieDetails.push(newMovie);
 		}
+		else {
+			let newmovieIndex = movieDetails.findIndex(movie => movie.id === newMovie.id)
+			movieDetails.splice(newmovieIndex, 1, newMovie)
+		}
+
 		this.setState({
 			movieDetails: movieDetails,
 			taskTypes: movieDetails, modal: !modal,
@@ -56,9 +63,8 @@ export default class Data extends React.Component {
 
 	dataChange(e) {
 		const { newMovie } = this.state
-		newMovie[e.target.id] = e.target.value
 		this.setState({
-			newMovie: newMovie
+			newMovie: { ...newMovie, [e.target.id]: e.target.value }
 		});
 	}
 
@@ -79,8 +85,6 @@ export default class Data extends React.Component {
 				jsonMoviesData: movieDetails
 			}, () => { navigate('/') });
 		}
-
-		console.log(this.state.jsonMoviesData)
 	}
 
 	editMovieInfo = (id) => {
