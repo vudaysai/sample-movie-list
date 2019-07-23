@@ -35,30 +35,29 @@ export default class Data extends React.Component {
 	}
 
 	toggle() {
+		let jsonMoviesData = this.state.jsonMoviesData
 		this.setState({
-			modal: !this.state.modal
+			modal: !this.state.modal, newMovie: { id: jsonMoviesData.length + 1, img: '', title: '', rating: '', likes: '', content: '', year: '', }
 		});
 	}
 
 	submitMovieInfo = (e) => {
 		e.preventDefault();
 		debugger
-		const { movieDetails, newMovie, modal } = this.state
-		let movieDetailsCopy = movieDetails
+		const { jsonMoviesData, newMovie, modal } = this.state
+		let movieDetailsCopy = jsonMoviesData
 		if (this.state.act === 0) {
 			movieDetailsCopy.push(newMovie);
-			console.log(movieDetails)
 		}
 
 		else {
-			let newmovieIndex = movieDetails.findIndex(movie => movie.id === newMovie.id)
+			let newmovieIndex = jsonMoviesData.findIndex(movie => movie.id === newMovie.id)
 			movieDetailsCopy.splice(newmovieIndex, 1, newMovie)
-			console.log(movieDetails)
 		}
 		this.setState({
-			movieDetails: movieDetailsCopy,
+			jsonMoviesData: movieDetailsCopy,
 			modal: !modal, act: 0,
-			newMovie: { id: movieDetails.length + 1, img: '', title: '', rating: '', likes: '', content: '', year: '', },
+			newMovie: { id: jsonMoviesData.length + 1, img: '', title: '', rating: '', likes: '', content: '', year: '', }
 		})
 	}
 
@@ -77,6 +76,7 @@ export default class Data extends React.Component {
 	}
 
 	removeMovieInfo = (id) => {
+		debugger
 		let movieDetails = [...this.state.jsonMoviesData];
 		let movieIndex = movieDetails.findIndex(movie => movie.id === id)
 		if (movieIndex !== -1) {
@@ -88,13 +88,14 @@ export default class Data extends React.Component {
 	}
 
 	editMovieInfo = (id) => {
-		let movieIndex = this.state.movieDetails.findIndex(movie => movie.id === id);
-		this.setState({ act: 1, newMovie: this.state.movieDetails[movieIndex], modal: !this.state.modal });
+		let movieIndex = this.state.jsonMoviesData.findIndex(movie => movie.id === id);
+		this.setState({ act: 1, newMovie: this.state.jsonMoviesData[movieIndex], modal: !this.state.modal });
 	}
 
 	closeMovieInfo = () => {
+		let jsonMoviesData = this.state.jsonMoviesData
 		this.setState({
-			showComponent: false,
+			showComponent: false, newMovie: { id: jsonMoviesData.length + 1, img: '', title: '', rating: '', likes: '', content: '', year: '', movie: [] }, act: 0
 		}, () => { navigate('/') });
 	}
 
