@@ -15,7 +15,7 @@ export default class Data extends React.Component {
 		super(props)
 		this.state = {
 			jsonMoviesData: [], movieDetails: '', modal: false, act: 0, showComponent: false, taskTypes: [], suggestions: [],
-			newMovie: { id: 1, img: '', title: '', rating: '', likes: '', content: '', year: '', movie: [] }
+			newMovie: { id: 0, img: '', title: '', rating: '', likes: '', content: '', year: '', movie: [] }
 		}
 		this.removeMovieInfo = this.removeMovieInfo.bind(this);
 		this.editMovieInfo = this.editMovieInfo.bind(this);
@@ -42,23 +42,24 @@ export default class Data extends React.Component {
 
 	submitMovieInfo = (e) => {
 		e.preventDefault();
+		debugger
 		const { movieDetails, newMovie, modal } = this.state
-
-
+		let movieDetailsCopy = movieDetails
 		if (this.state.act === 0) {
-			movieDetails.push(newMovie);
+			movieDetailsCopy.push(newMovie);
+			console.log(movieDetails)
 		}
+
 		else {
 			let newmovieIndex = movieDetails.findIndex(movie => movie.id === newMovie.id)
-			movieDetails.splice(newmovieIndex, 1, newMovie)
+			movieDetailsCopy.splice(newmovieIndex, 1, newMovie)
+			console.log(movieDetails)
 		}
-
 		this.setState({
-			movieDetails: movieDetails,
-			taskTypes: movieDetails, modal: !modal,
-			newMovie: { id: 2, img: '', title: '', rating: '', likes: '', content: '', year: '' },
+			movieDetails: movieDetailsCopy,
+			modal: !modal, act: 0,
+			newMovie: { id: movieDetails.length + 1, img: '', title: '', rating: '', likes: '', content: '', year: '', },
 		})
-
 	}
 
 	dataChange(e) {
@@ -77,7 +78,6 @@ export default class Data extends React.Component {
 
 	removeMovieInfo = (id) => {
 		let movieDetails = [...this.state.jsonMoviesData];
-		debugger
 		let movieIndex = movieDetails.findIndex(movie => movie.id === id)
 		if (movieIndex !== -1) {
 			movieDetails.splice(movieIndex, 1);
